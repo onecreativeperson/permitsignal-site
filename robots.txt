@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://getpermitsignal.com/sitemap.xml
