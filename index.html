@@ -50,6 +50,29 @@ p{margin:0}
 .eyebrow{font:500 12px/1 var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--blue-2)}
 .sub{color:var(--ink-2);font-size:17px;max-width:62ch;margin-top:12px}
 
+/* comparison */
+.cmp{margin-top:28px;border:1px solid var(--rule);border-radius:var(--r);background:var(--sheet);overflow:hidden}
+.cmp table{width:100%;border-collapse:collapse;font-size:15px}
+.cmp th{font:500 12px/1 var(--mono);letter-spacing:.12em;text-transform:uppercase;text-align:left;padding:14px 18px;color:var(--ink-3);border-bottom:1px solid var(--rule);background:var(--bg)}
+.cmp th:nth-child(3){color:var(--blue-2)}
+.cmp td{padding:13px 18px;border-bottom:1px solid var(--rule);vertical-align:top;color:var(--ink-2)}
+.cmp tr:last-child td{border-bottom:0}
+.cmp td:first-child{font-weight:600;color:var(--ink);width:24%}
+.cmp td:nth-child(3){background:var(--tint);color:var(--ink)}
+.cmp .ok::before{content:"✓ ";color:var(--green);font-weight:600}
+.cmp .no::before{content:"— ";color:var(--ink-3)}
+.cmp-note{color:var(--ink-3);font-size:14px;margin-top:14px;max-width:72ch}
+@media (max-width:700px){
+  .cmp table,.cmp tbody,.cmp tr,.cmp td{display:block;width:100%}
+  .cmp thead{display:none}
+  .cmp tr{border-bottom:1px solid var(--rule-2)}
+  .cmp td{border-bottom:0;padding:8px 16px}
+  .cmp td:first-child{width:auto;padding-top:14px;padding-bottom:2px}
+  .cmp td:nth-child(3){padding-bottom:14px}
+  .cmp td:nth-child(2)::before{content:"ECHO Notify · ";font:500 11px/1 var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3)}
+  .cmp td:nth-child(3)::before{content:"Permit Signal · ";font:500 11px/1 var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--blue-2)}
+}
+
 /* header */
 header{position:sticky;top:0;z-index:10;background:rgba(246,248,250,.85);backdrop-filter:saturate(1.4) blur(10px);-webkit-backdrop-filter:saturate(1.4) blur(10px);border-bottom:1px solid var(--rule)}
 header .wrap{display:flex;align-items:center;justify-content:space-between;gap:16px;height:64px}
@@ -210,6 +233,7 @@ footer a{color:var(--ink-2)}
     <nav aria-label="Main">
       <a href="#how">How it works</a>
       <a href="#who">Who it's for</a>
+      <a href="#compare">vs. ECHO Notify</a>
       <a href="#pricing">Pricing</a>
       <a href="#sources">Sources</a>
       <a href="#faq">FAQ</a>
@@ -229,7 +253,7 @@ footer a{color:var(--ink-2)}
           <a class="btn" href="#request" data-open>Send me this week's brief for my county</a>
           <a class="btn ghost" href="#how">See how it works</a>
         </div>
-        <p class="note"><b>Free sample, no sign-up.</b> Email your county and what your firm does; the current week's signals come back the same business day.</p>
+        <p class="note"><b>Free sample, no sign-up.</b> Tell us your county and what your firm does; the current week's signals come back within one business day.</p>
       </div>
 
       <div>
@@ -255,7 +279,7 @@ footer a{color:var(--ink-2)}
       <div><div class="k">58,000+</div><div class="l">enforcement events tracked in TX, LA and NC since 2019</div></div>
       <div><div class="k">12,000+</div><div class="l">permitted facilities followed</div></div>
       <div><div class="k">Daily</div><div class="l">records read every morning; agencies publish weekly</div></div>
-      <div><div class="k">100%</div><div class="l">public records – EPA ECHO and state agency data</div></div>
+      <div><div class="k">2 sources</div><div class="l">EPA ECHO national data plus TCEQ notices of violation that never reach ECHO</div></div>
     </div>
   </div>
 
@@ -265,24 +289,47 @@ footer a{color:var(--ink-2)}
       <h2>Public records, read every morning so you don't have to.</h2>
       <p class="sub">The information is already public. The problem is that nobody has time to read enforcement dockets every day. We do, and we send you only what matters in your counties.</p>
       <div class="grid3">
-        <div class="step"><div class="t">STEP 1 · READ</div><h3>We read the record</h3><p>Formal and informal enforcement actions, notices of violation, penalty orders and quarterly non-compliance data from EPA ECHO and the state agencies (TCEQ, LDEQ, NCDEQ) for the counties you cover.</p></div>
+        <div class="step"><div class="t">STEP 1 · READ</div><h3>We read the record</h3><p>Formal and informal enforcement actions, penalty orders and quarterly non-compliance data from EPA ECHO for TX, LA and NC – plus, for Texas, every Notice of Violation TCEQ publishes in its own open data, including public water systems that ECHO never covers.</p></div>
         <div class="step"><div class="t">STEP 2 · SORT</div><h3>We sort out what matters</h3><p>Each new action is classified by what the facility will likely need – treatment upgrade, collection system, monitoring and reporting, permit work or stormwater – and rated for urgency using penalties, non-compliance status and 18 months of history.</p></div>
         <div class="step"><div class="t">STEP 3 · SEND</div><h3>You get a one-page brief</h3><p>Facility, action, penalty, the pattern behind it, the permit record and a plain-English line on what to offer. Only your counties. Nothing on quiet days.</p></div>
       </div>
     </div>
   </section>
 
-  <section id="who" class="alt">
+  <section id="who">
     <div class="wrap">
       <p class="eyebrow">Who it's for</p>
       <h2>Small firms that win work by showing up first.</h2>
       <p class="sub">Most signals come from small plants: municipal WWTPs of towns under 20,000 people, utility districts, subdivision package plants, and industrial sites with stormwater permits. That is exactly where local firms compete.</p>
       <div class="grid4">
-        <div class="card"><h3>Contract operators</h3><p>District and package-plant boards revisit who runs their plant right after a penalty order – for a few weeks.</p></div>
+        <div class="card"><h3>Contract operators</h3><p>District and package-plant boards revisit who runs their plant right after a penalty order – for a few weeks. In Texas the brief also covers public water systems cited by TCEQ.</p></div>
         <div class="card"><h3>Engineering firms</h3><p>Orders and reviews are followed by capacity studies, corrective action plans and design contracts.</p></div>
         <div class="card"><h3>Compliance and DMR consultants</h3><p>Missed DMRs, notices of violation and enforcement responses – each with a deadline attached.</p></div>
         <div class="card"><h3>Stormwater and SWPPP</h3><p>Industrial and construction sites cited under their stormwater permits need updated plans and BMP fixes fast.</p></div>
       </div>
+    </div>
+  </section>
+
+  <section id="compare" class="alt">
+    <div class="wrap">
+      <p class="eyebrow">The honest comparison</p>
+      <h2>EPA already has a free notification tool. Here is what it does and doesn't do.</h2>
+      <p class="sub">ECHO Notify is a good service and we say so. It sends a weekly list of raw changes in the EPA database. Permit Signal is the layer on top: read daily, filtered to your trade and counties, with the state record ECHO doesn't have and a plain-English line on what the facility will need.</p>
+      <div class="cmp">
+        <table>
+          <thead><tr><th scope="col"></th><th scope="col">EPA ECHO Notify (free)</th><th scope="col">Permit Signal</th></tr></thead>
+          <tbody>
+            <tr><td>Cadence</td><td>One email a week, all changes since the last one</td><td class="ok">Read every morning, sent the day a record appears</td></tr>
+            <tr><td>What you receive</td><td>Raw database rows and codes; all programs (air, water, waste) unless you filter them yourself</td><td class="ok">One page per signal: facility, action, penalty, 18-month pattern, likely need</td></tr>
+            <tr><td>Texas state notices</td><td class="no">Only what TCEQ reports into EPA's system, often weeks to months later</td><td class="ok">TCEQ's own Notice of Violation data, including public water systems ECHO never lists</td></tr>
+            <tr><td>Filtered to your trade</td><td class="no">By place and program only</td><td class="ok">Sorted into treatment, collection, monitoring, permit, stormwater and water-system work, rated by urgency</td></tr>
+            <tr><td>Exclusivity</td><td class="no">Anyone can subscribe to the same county</td><td class="ok">One subscriber per county and trade</td></tr>
+            <tr><td>Set-up</td><td>Create an ECHO account, build subscriptions per state and program</td><td class="ok">Tell us your county and trade; nothing to install or learn</td></tr>
+            <tr><td>Questions</td><td class="no">Help desk</td><td class="ok">Steve replies, usually the same day</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="cmp-note">If a weekly raw feed is all you need, ECHO Notify is free and we recommend it. Permit Signal is for firms that want the reading done for them and their county to themselves.</p>
     </div>
   </section>
 
@@ -317,24 +364,25 @@ footer a{color:var(--ink-2)}
           <a class="btn ghost" href="#request" data-plan="State, one trade" data-open>Ask about a state</a>
         </div>
       </div>
-      <p class="fine">Billing starts after the free trial, by card, month to month. No contract.</p>
+      <p class="fine">Billing starts after the free trial, by card, month to month. No contract. If a paid month wasn't useful, say so within 14 days and it is refunded – see the <a href="refunds.html">refund policy</a>.</p>
     </div>
   </section>
 
-  <section id="sources" class="alt">
+  <section id="sources">
     <div class="wrap">
       <p class="eyebrow">Sources and fair use</p>
       <h2>Only the public record. Nothing scraped from private systems.</h2>
       <div class="src">
         <div>
-          <p>Permit Signal is built on the EPA's Enforcement and Compliance History Online (ECHO) datasets for the NPDES program – the same records anyone can download – and on state agency enforcement data as reported to EPA. We read them daily, structure them and add a plain-English reading of what the facility will likely need.</p>
-          <p>A brief is a pointer to a public record, not a judgment of the facility. Every brief links to the underlying ECHO facility report so you can check the record yourself. Permit Signal is not legal advice and is not affiliated with any agency.</p>
+          <p>Permit Signal is built on the EPA's Enforcement and Compliance History Online (ECHO) datasets for the NPDES program – the same records anyone can download – and, for Texas, on the Notices of Violation TCEQ publishes on the Texas Open Data Portal. We read both every morning, structure them and add a plain-English reading of what the facility will likely need.</p>
+          <p>A brief is a pointer to a public record, not a judgment of the facility. Every brief links to the underlying ECHO facility report or TCEQ Central Registry entry so you can check the record yourself. Permit Signal is not legal advice and is not affiliated with any agency.</p>
         </div>
         <ul>
           <li><b>EPA ECHO · ICIS-NPDES national dataset</b>Facilities, permits, enforcement actions, quarterly non-compliance reports</li>
-          <li><b>State agencies</b>TCEQ, LDEQ and NCDEQ enforcement actions as reported to EPA</li>
+          <li><b>TCEQ Notices of Violation · Texas Open Data Portal</b>Every NOV letter TCEQ regions issue, with the rules cited – wastewater, stormwater and public water systems. Most never appear in ECHO</li>
+          <li><b>State actions in ECHO</b>TCEQ, LDEQ and NCDEQ enforcement actions as reported to EPA</li>
           <li><b>Permit records</b>Permit number, permit holder and agency contact as listed on the public record</li>
-          <li><b>Freshness</b>Agencies publish about weekly; we read the data every morning and send new items the day they appear</li>
+          <li><b>Freshness, honestly</b>EPA refreshes ECHO weekly and TCEQ posts NOV data about monthly; agencies can take weeks to enter an action. We read every morning and send an item the day it is published – we cannot make an agency publish faster</li>
         </ul>
       </div>
     </div>
@@ -346,16 +394,16 @@ footer a{color:var(--ink-2)}
       <h2>Straight answers.</h2>
       <div class="faq">
         <details><summary>Is it legal to use this for business development?</summary><p>Yes. Enforcement actions, permits and non-compliance reports are public records published by EPA and the state agencies precisely so that the public can see them. Permit Signal reads and organizes them; it does not access anything private.</p></details>
-        <details><summary>How is this different from checking ECHO myself?</summary><p>You can – it's all there. But ECHO is built for regulators and researchers, not for a contractor with ten minutes in the morning. We check every county you cover daily, filter out the noise, add 18 months of context and tell you what the facility will likely need, in one page.</p></details>
+        <details><summary>How is this different from checking ECHO myself, or from ECHO Notify?</summary><p>You can – it's all there, and ECHO Notify will email you weekly changes for free. But ECHO is built for regulators and researchers, not for a contractor with ten minutes in the morning, and it doesn't carry TCEQ's own notices. We check every county you cover daily, add the Texas state record, filter out the noise, add 18 months of context and tell you what the facility will likely need, in one page. See the comparison above.</p></details>
         <details><summary>What does "exclusive" mean?</summary><p>For each county we take one subscriber per trade – one contract operator, one engineering firm, one compliance consultant, one stormwater firm. Your direct competitors in that county don't get the brief.</p></details>
-        <details><summary>How current is the data?</summary><p>EPA refreshes the national dataset about once a week; state actions usually appear within days to a few weeks of being issued. We read the data every morning, so you see a new action the day it is published – typically well before it turns into an RFP.</p></details>
+        <details><summary>How current is the data?</summary><p>EPA refreshes the national dataset about once a week and TCEQ publishes its NOV data about monthly; agencies themselves can take days to weeks to enter an action. We read every source every morning, so you see an action the day it is published – typically well before it turns into an RFP. We won't claim real-time; nobody has that.</p></details>
         <details><summary>Do you send facility contact details?</summary><p>We include what the public permit record lists – permit number, permit holder and the agency contact – plus a link to the ECHO facility report. We don't buy or scrape personal contact data.</p></details>
-        <details><summary>How do I start and how do I cancel?</summary><p>Email your county and what your firm does. You get the current week's signals for free, then two weeks of daily briefs at no charge. If it's useful, billing is monthly by card; cancel with one email.</p></details>
+        <details><summary>How do I start and how do I cancel?</summary><p>Send the form with your county and what your firm does. You get the current week's signals for free, then two weeks of daily briefs at no charge. If it's useful, billing is monthly by card; cancel with one email.</p></details>
       </div>
     </div>
   </section>
 
-  <section class="alt" id="about">
+  <section id="about" class="alt">
     <div class="wrap">
       <p class="eyebrow">Who's behind it</p>
       <h2>Built and run by one person.</h2>
@@ -413,7 +461,7 @@ footer a{color:var(--ink-2)}
   <div class="wrap">
     <span>© 2026 Permit Signal · Steve Toporcer</span>
     <span>Public-record data from EPA ECHO. Not affiliated with EPA, TCEQ, LDEQ or NCDEQ. Not legal advice.</span>
-    <span><a href="mailto:steve@getpermitsignal.com">steve@getpermitsignal.com</a></span>
+    <span><a href="terms.html">Terms</a> · <a href="privacy.html">Privacy</a> · <a href="refunds.html">Refunds</a> · <a href="mailto:steve@getpermitsignal.com">steve@getpermitsignal.com</a></span>
   </div>
 </footer>
 
