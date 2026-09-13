@@ -253,7 +253,7 @@ footer a{color:var(--ink-2)}
           <a class="btn" href="#request" data-open>Send me this week's brief for my county</a>
           <a class="btn ghost" href="#how">See how it works</a>
         </div>
-        <p class="note"><b>Free sample, no sign-up.</b> Tell us your county and what your firm does; the current week's signals come back within one business day.</p>
+        <p class="note"><b>Free sample, no sign-up.</b> Tell us your county and what your firm does; the current brief usually comes back within the hour.</p>
       </div>
 
       <div>
@@ -417,8 +417,8 @@ footer a{color:var(--ink-2)}
   <section class="final">
     <div class="wrap">
       <p class="eyebrow">Free sample</p>
-      <h2>Tell us your county. We'll send this week's signals today.</h2>
-      <p>Thirty seconds, no sign-up. Tell Steve your county and what your firm does; you'll get the current brief back within one business day and can decide from there.</p>
+      <h2>Tell us your county. The brief is on its way within the hour.</h2>
+      <p>Thirty seconds, no sign-up. Tell Steve your county and what your firm does; you'll get the current brief back within the hour and can decide from there.</p>
       <a class="btn" href="#request" data-open>Request a free sample</a>
       <p class="mail">or write directly: <a href="mailto:steve@getpermitsignal.com">steve@getpermitsignal.com</a></p>
     </div>
@@ -430,7 +430,7 @@ footer a{color:var(--ink-2)}
       <input type="hidden" name="zf_redirect_url" value="">
       <input type="hidden" name="zc_gad" value="">
       <h3 id="req-title">Get this week's brief for your county – free</h3>
-      <p class="lead">Steve reads the request and sends the current signals within one business day. No sign-up, nothing to install.</p>
+      <p class="lead">You get the current brief for your county – new signals, early warnings and permit renewals – usually within the hour. No sign-up, nothing to install.</p>
       <label for="f-email">Work email</label>
       <input id="f-email" type="email" name="Email" maxlength="255" required autocomplete="email" placeholder="you@yourcompany.com">
       <label for="f-company">Company</label>
@@ -451,7 +451,7 @@ footer a{color:var(--ink-2)}
     <div class="ok" id="req-ok" hidden>
       <div class="tick" aria-hidden="true">✓</div>
       <h3>Request received</h3>
-      <p>Steve will email this week's brief for your county within one business day. Check your spam folder if nothing arrives.</p>
+      <p>The brief for your county is being prepared and usually arrives within the hour, with Steve in copy. Check your spam folder if nothing arrives.</p>
       <div class="row" style="justify-content:center"><button class="btn ghost" type="button" data-close>Close</button></div>
     </div>
   </dialog>
@@ -484,6 +484,14 @@ footer a{color:var(--ink-2)}
     err.hidden=true;btn.disabled=true;btn.textContent='Sending…';
     var fd=new FormData(form);
     if(plan)fd.set('MultiLine','Interested in: '+plan+'\n'+(form.MultiLine.value||''));
+    /* 1) zápis do našej databázy – z nej ide automatická vzorka (publishable key, RLS: insert only) */
+    try{
+      fetch('https://asnpyrrdeauhkskkkmuc.supabase.co/rest/v1/sample_requests',{method:'POST',mode:'cors',credentials:'omit',
+        headers:{'apikey':'sb_publishable_9Nwzk4Ql2WH1PCQZbNe5BQ_-8eVhBve','Content-Type':'application/json','Prefer':'return=minimal'},
+        body:JSON.stringify({email:email,company:form.SingleLine.value||null,county_text:county,trade_text:form.SingleLine2.value||null,
+          notes:form.MultiLine.value||null,plan:plan||null})}).catch(function(){});
+    }catch(x){}
+    /* 2) notifikácia Stevovi cez Zoho Forms */
     function done(){form.hidden=true;ok.hidden=false;form.reset();}
     function fallback(){
       /* fetch failed (old browser, blocker, offline flag): post the form the classic way into a hidden iframe */
