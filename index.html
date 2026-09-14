@@ -353,7 +353,7 @@ footer a{color:var(--ink-2)}
             <li>Additional counties available</li>
             <li>First two weeks free, cancel any time</li>
           </ul>
-          <a class="btn" href="#request" data-plan="County exclusive" data-open>Start with a free sample</a>
+          <a class="btn" href="#request" data-plan="trial:county" data-open>Start the free trial</a>
         </div>
         <div class="plan">
           <h3>State, one trade</h3>
@@ -365,10 +365,10 @@ footer a{color:var(--ink-2)}
             <li>Daily briefs, sorted by urgency</li>
             <li>First two weeks free, cancel any time</li>
           </ul>
-          <a class="btn ghost" href="#request" data-plan="State, one trade" data-open>Ask about a state</a>
+          <a class="btn ghost" href="#request" data-plan="trial:state" data-open>Start a state trial</a>
         </div>
       </div>
-      <p class="fine">Billing starts after the free trial, by card, month to month. No contract. If a paid month wasn't useful, say so within 14 days and it is refunded – see the <a href="refunds.html">refund policy</a>.</p>
+      <p class="fine">No card to start. Three days before the trial ends you get one e-mail with a payment link; billing is by card through Paddle, month to month. No contract. If a paid month wasn't useful, say so within 14 days and it is refunded – see the <a href="refunds.html">refund policy</a>.</p>
     </div>
   </section>
 
@@ -439,7 +439,7 @@ footer a{color:var(--ink-2)}
       <input id="f-email" type="email" name="Email" maxlength="255" required autocomplete="email" placeholder="you@yourcompany.com">
       <label for="f-company">Company</label>
       <input id="f-company" type="text" name="SingleLine" maxlength="255" autocomplete="organization" placeholder="Your firm">
-      <label for="f-county">County and state</label>
+      <label for="f-county" id="f-county-label">County and state</label>
       <input id="f-county" type="text" name="SingleLine1" maxlength="255" required placeholder="e.g. Harris County, TX">
       <div class="hint" id="f-hint" hidden></div>
       <label for="f-trade">What your firm does</label>
@@ -456,7 +456,7 @@ footer a{color:var(--ink-2)}
     <div class="ok" id="req-ok" hidden>
       <div class="tick" aria-hidden="true">✓</div>
       <h3>Request received</h3>
-      <p>The brief for your county is being prepared and usually arrives within the hour, with Steve in copy. Check your spam folder if nothing arrives.</p>
+      <p id="req-ok-p">The brief for your county is being prepared and usually arrives within the hour, with Steve in copy. Check your spam folder if nothing arrives.</p>
       <div class="row" style="justify-content:center"><button class="btn ghost" type="button" data-close>Close</button></div>
     </div>
   </dialog>
@@ -475,7 +475,18 @@ footer a{color:var(--ink-2)}
 (function(){
   var dlg=document.getElementById('request'),form=document.getElementById('req-form'),ok=document.getElementById('req-ok'),err=document.getElementById('req-err'),btn=document.getElementById('req-submit');
   var plan='';
-  function open(p){plan=p||'';form.hidden=false;ok.hidden=true;err.hidden=true;btn.disabled=false;btn.textContent='Send me the brief';
+  var T=document.getElementById('req-title'),L=dlg.querySelector('.lead'),OKP=document.getElementById('req-ok-p'),FCL=document.getElementById('f-county-label');
+  function open(p){plan=p||'';form.hidden=false;ok.hidden=true;err.hidden=true;btn.disabled=false;
+    var trial=plan.indexOf('trial')===0,st=plan==='trial:state';
+    T.textContent=trial?(st?'Start your 14-day state trial':'Start your 14-day free trial'):"Get this week's brief for your county – free";
+    L.textContent=trial?'Your first brief arrives usually within the hour and then every morning there is something new. The '+(st?'state':'county')+' is reserved for your firm in your trade for the trial. No card needed – you get one e-mail before it ends.'
+      :'You get the current brief for your county – new signals, early warnings and permit renewals – usually within the hour. No sign-up, nothing to install.';
+    FCL.textContent=st?'State (TX, LA or NC)':'County and state';
+    document.getElementById('f-county').placeholder=st?'e.g. Texas':'e.g. Harris County, TX';
+    document.getElementById('f-trade').required=trial;
+    OKP.textContent=trial?'Your trial is being set up and the first brief usually arrives within the hour, with Steve in copy. Check your spam folder if nothing arrives.'
+      :'The brief for your county is being prepared and usually arrives within the hour, with Steve in copy. Check your spam folder if nothing arrives.';
+    btn.textContent=trial?'Start my trial':'Send me the brief';
     if(typeof dlg.showModal==='function'){dlg.showModal();}else{dlg.setAttribute('open','');}
     var f=document.getElementById('f-email');if(f)setTimeout(function(){f.focus();},50);}
   function close(){if(dlg.open&&typeof dlg.close==='function')dlg.close();else dlg.removeAttribute('open');}
@@ -505,6 +516,7 @@ footer a{color:var(--ink-2)}
     e.preventDefault();
     var email=form.Email.value.trim(),county=form.SingleLine1.value.trim();
     if(!email||email.indexOf('@')<1||!county){err.textContent='Please fill in your work email and your county.';err.hidden=false;return;}
+    if(plan.indexOf('trial')===0&&!form.SingleLine2.value.trim()){err.textContent='Please tell us what your firm does – the trial is exclusive per trade.';err.hidden=false;return;}
     err.hidden=true;btn.disabled=true;btn.textContent='Sending…';
     var fd=new FormData(form);
     if(plan)fd.set('MultiLine','Interested in: '+plan+'\n'+(form.MultiLine.value||''));
