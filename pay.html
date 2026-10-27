@@ -229,26 +229,39 @@ p{color:var(--ink-2);margin:0 0 14px}
   <p class="eyebrow">Permit Signal · checkout</p>
   <h1>Continue your subscription</h1>
   <p>Payments are handled by <b>Paddle</b>, our merchant of record: card, Apple Pay or Google Pay, sales tax included where it applies, invoice by e-mail. Month to month, cancel any time.</p>
-  <p class="wait" id="wait">Opening secure checkout…</p>
+  <p class="wait" id="wait" aria-live="polite">Opening secure checkout…</p>
   <p><button class="btn" id="again" type="button" hidden>Open checkout</button></p>
-  <div class="err" id="err">The checkout could not be opened. Please reply to your trial e-mail or write to <a href="mailto:steve@getpermitsignal.com">steve@getpermitsignal.com</a> and Štefan will send a fresh link.</div>
+  <div class="err" id="err" role="alert">The checkout could not be opened – the payment link may be expired or already used. If you have already paid, you are all set: the receipt from Paddle is in your e-mail. Otherwise reply to your trial e-mail or write to <a href="mailto:steve@getpermitsignal.com">steve@getpermitsignal.com</a> and Štefan will send a fresh link.</div>
   <p style="font-size:13px;color:var(--ink-3);margin-top:22px">By continuing you agree to the <a href="terms.html">Terms</a> and <a href="refunds.html">Refund policy</a>.</p>
 </main>
 <script>
 (function(){
   var txn=new URLSearchParams(location.search).get('_ptxn'),wait=document.getElementById('wait'),err=document.getElementById('err'),again=document.getElementById('again');
+  var state='opening',timer=null;
+  function say(t){wait.textContent=t;wait.hidden=false;}
   function fail(){wait.hidden=true;err.style.display='block';}
+  function close(){try{Paddle.Checkout.close();}catch(e){}}
+  /* checkout sa neotvoril (zlý/expirovaný/zaplatený link, Paddle nedostupný): zavrieť neviditeľný overlay, ukázať chybu */
+  function broken(){state='error';clearTimeout(timer);close();fail();again.textContent='Try again';again.hidden=false;}
   if(!txn||typeof Paddle==='undefined'){fail();return;}
   fetch('https://asnpyrrdeauhkskkkmuc.supabase.co/rest/v1/site_content?key=eq.paddle&select=data',{headers:{apikey:'sb_publishable_9Nwzk4Ql2WH1PCQZbNe5BQ_-8eVhBve'}})
     .then(function(r){return r.json();}).then(function(rows){
       var cfg=rows&&rows[0]&&rows[0].data; if(!cfg||!cfg.token){fail();return;}
       if(cfg.env==='sandbox')Paddle.Environment.set('sandbox');
       Paddle.Initialize({token:cfg.token,checkout:{settings:{displayMode:'overlay',theme:'light',successUrl:'https://getpermitsignal.com/thanks.html',showAddDiscounts:false}},
-        eventCallback:function(ev){if(ev&&ev.name==='checkout.closed'){wait.textContent='Checkout closed.';again.hidden=false;}}});
-      function openIt(){Paddle.Checkout.open({transactionId:txn});}
+        eventCallback:function(ev){
+          var n=ev&&ev.name;
+          if(n==='checkout.loaded'){state='open';clearTimeout(timer);err.style.display='none';say('Secure checkout is open.');again.hidden=true;}
+          else if(n==='checkout.error'&&state==='opening'){broken();}
+          else if(n==='checkout.closed'&&state!=='error'){state='closed';clearTimeout(timer);say('Checkout closed.');again.textContent='Open checkout';again.hidden=false;}
+        }});
+      function openIt(){
+        state='opening';err.style.display='none';again.hidden=true;say('Opening secure checkout…');
+        clearTimeout(timer);timer=setTimeout(function(){if(state==='opening')broken();},25000);
+        try{Paddle.Checkout.open({transactionId:txn});}catch(e){broken();}
+      }
       again.addEventListener('click',openIt);
       openIt();
-      wait.textContent='Secure checkout is open. If it did not appear, use the button below.';again.hidden=false;
     }).catch(fail);
 })();
 </script>
